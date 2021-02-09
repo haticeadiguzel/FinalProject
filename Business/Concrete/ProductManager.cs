@@ -24,5 +24,15 @@ namespace Business.Concrete
             return _productDal.GetAll(); //yukarıcaki construvctor sayesinde return edebildik.
             //Business da sadece IProductDal dır.
         }
+
+        public List<Product> GetAllByCategoryId(int id)
+        {
+            return _productDal.GetAll(p=>p.CategoryId==id); //önceden yazdığımız filtreleme kodu sayesinde bunların hepsini yazabiliyoruz
+        }
+
+        public List<Product> GetByUnitPrice(decimal min, decimal max)
+        {
+            return _productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max);
+        }
     }
 }

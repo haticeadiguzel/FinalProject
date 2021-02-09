@@ -3,6 +3,7 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 //5.
 namespace DataAccess.Concrete.InMemory
@@ -51,9 +52,19 @@ namespace DataAccess.Concrete.InMemory
             //SingleOrDefault yerine FirstOrDefault yada first de kullanılabilir.
         }
 
+        public Product Get(Expression<Func<Product, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Product> GetAll()
         {
             return _products; //Burada listeyi döndürmemiz gerekir.
+        }
+
+        public List<Product> GetAll(Expression<Func<Product, bool>> filter = null)
+        {
+            throw new NotImplementedException();
         }
 
         public List<Product> GetAllByCategory(int categoryId)
