@@ -1,4 +1,5 @@
 ﻿using Business.Abstact;
+using Business.Constants;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
@@ -25,18 +26,23 @@ namespace Business.Concrete
 
             if (product.ProductName.Length<2)
             {
-                return new ErrorResult("Ürün ismi min 2 karakter olmalıdır");
+                //magic strings
+                return new ErrorResult(Messages.ProductNameInvalid);
             }
 
             _productDal.Add(product);
-            return new Result(true, "Ürün eklendi");
+            return new SuccessResult(Messages.ProductAdded);
         }
 
-        public List<Product> GetAll()
+        public IDataResult<List<Product>> GetAll()
         {
             //İş kodları
             //Bir iş sınıfı başka sınıfları newk-lemez. Bu yüzden metotların dışında bir global kurarız.
-            return _productDal.GetAll(); //yukarıcaki construvctor sayesinde return edebildik.
+            if (DateTime.Now.Hour==22)
+            {
+                return new ErrorDataResult();
+            }
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(),true,"Ürünler listelendi"); //yukarıcaki construvctor sayesinde return edebildik.
             //Business da sadece IProductDal dır.
         }
 
