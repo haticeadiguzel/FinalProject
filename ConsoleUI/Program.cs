@@ -13,32 +13,47 @@ namespace ConsoleUI
 
             //CategoryTest();
 
+            //ProductTest2();
+
+
+
+        }
+
+        private static void ProductTest2()
+        {
             ProductManager productManager = new ProductManager(new EfProductDal());//Parantez içindeki zaten sana hata verip ne yazman gerektiğini söylüyor.
 
-            foreach (var product in productManager.GetProductDetails())
+            var result = productManager.GetProductDetails();
+            if (result.Success == true)
             {
-                Console.WriteLine(product.ProductName + "/" + product.CategoryName);
+                foreach (var product in result.Data)
+                {
+                    Console.WriteLine(product.ProductName + "/" + product.CategoryName);
+                }
             }
-
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
         }
 
-        private static CategoryManager CategoryTest()
-        {
-            CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
+        //private static CategoryManager CategoryTest()
+        //{
+        //    CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
 
-            foreach (var category in categoryManager.GetAll())
-            {
-                Console.WriteLine(category.CategoryName+"/"+category.CategoryId);
-            }
+        //    foreach (var category in categoryManager.)
+        //    {
+        //        Console.WriteLine(category.CategoryName + "/" + category.CategoryId);
+        //    }
 
-            return categoryManager;
-        }
+        //    return categoryManager;
+        //}
 
         private static void ProductTest()
         {
             ProductManager productManager = new ProductManager(new EfProductDal());//Parantez içindeki zaten sana hata verip ne yazman gerektiğini söylüyor.
 
-            foreach (var product in productManager.GetByUnitPrice(40, 100))
+            foreach (var product in productManager.GetByUnitPrice(40, 100).Data)
             {
                 Console.WriteLine(product.ProductName);
             }
