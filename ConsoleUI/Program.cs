@@ -19,23 +19,23 @@ namespace ConsoleUI
 
         }
 
-        private static void ProductTest2()
-        {
-            ProductManager productManager = new ProductManager(new EfProductDal());//Parantez içindeki zaten sana hata verip ne yazman gerektiğini söylüyor.
+        //private static void ProductTest2()
+        //{
+        //    ProductManager productManager = new ProductManager (new EfProductDal());//Parantez içindeki zaten sana hata verip ne yazman gerektiğini söylüyor.
 
-            var result = productManager.GetProductDetails();
-            if (result.Success == true)
-            {
-                foreach (var product in result.Data)
-                {
-                    Console.WriteLine(product.ProductName + "/" + product.CategoryName);
-                }
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
-        }
+        //    var result = productManager.GetProductDetails();
+        //    if (result.Success == true)
+        //    {
+        //        foreach (var product in result.Data)
+        //        {
+        //            Console.WriteLine(product.ProductName + "/" + product.CategoryName);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine(result.Message);
+        //    }
+        //}
 
         //private static CategoryManager CategoryTest()
         //{
@@ -49,14 +49,14 @@ namespace ConsoleUI
         //    return categoryManager;
         //}
 
-        private static void ProductTest()
-        {
-            ProductManager productManager = new ProductManager(new EfProductDal());//Parantez içindeki zaten sana hata verip ne yazman gerektiğini söylüyor.
+        //private static void ProductTest()
+        //{
+        //    ProductManager productManager = new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal()));
 
-            foreach (var product in productManager.GetByUnitPrice(40, 100).Data)
-            {
-                Console.WriteLine(product.ProductName);
-            }
-        }
+        //    foreach (var product in productManager.GetByUnitPrice(40, 100).Data)
+        //    {
+        //        Console.WriteLine(product.ProductName);
+        //    }
+        //}
     }
 }
