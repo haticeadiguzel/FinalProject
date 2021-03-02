@@ -1,4 +1,5 @@
 ﻿using Business.Abstact;
+using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -28,6 +29,7 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
@@ -61,9 +63,15 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>> (_productDal.GetAll(p=>p.CategoryId==id)); //önceden yazdığımız filtreleme kodu sayesinde bunların hepsini yazabiliyoruz
         }
 
-        public IDataResult<Product> GetById(int productId)
+        public IDataResult<Product> Get(int productId)
         {
-            return new SuccessDataResult<Product>(_productDal.Get(p=>p.ProductId==productId));
+            return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
+        }
+
+        public IResult Delete(Product product)
+        {
+            _productDal.Delete(product);
+            return new SuccessResult(Messages.ProductDeleted);
         }
 
         public IDataResult<List<Product>> GetByUnitPrice(decimal min, decimal max)

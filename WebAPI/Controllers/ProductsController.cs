@@ -12,30 +12,71 @@ using System.Threading.Tasks;
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")] 
-    [ApiController] //ATTRIBUTE demektir. Bu class bir controllerdır ona göre davran demek
+    [ApiController]
     public class ProductsController : ControllerBase
     {
-        IProductService _productService;//field
+        IProductService _productService;
 
         public ProductsController(IProductService productService)
         {
-            //Controller sen bir IProductService bağımlısısın demek
-            //Gevşek bağlılık
             _productService = productService;
         }
 
-        [HttpGet("getall")]//diğer getler ile karışmasın diye isimlendirdik
+        [HttpGet("getall")]
 
         public IActionResult GetAll()
         {
             var result = _productService.GetAll();
             if (result.Success)
             {
-                return Ok(result); //result.Data
+                return Ok(result);
             }
-            return BadRequest(result); //result.Message yazarsak sadece sistem bakımda yazar
+            return BadRequest(result);
         }
 
+        [HttpGet("get")]
+        public IActionResult Get(int ProductId)
+        {
+            var result = _productService.Get(ProductId);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        
+        [HttpPost("add")]
+        public IActionResult Add(Product product)
+        {
+            var result = _productService.Add(product);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("delete")]
+        public IActionResult Delete(Product product)
+        {
+            var result = _productService.Delete(product);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("update")]
+        public IActionResult Update(Product product)
+        {
+            var result = _productService.Update(product);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
         //1. deneme
         //public string GetAll()
         //{
@@ -58,27 +99,5 @@ namespace WebAPI.Controllers
         //    var result = _productService.GetAll();
         //    return result.Data;
         //}
-
-        [HttpGet("getbyid")]//isimlendirdik hata olamsın diye
-        public IActionResult GetById(int id)
-        {
-            var result = _productService.GetById(id);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-        
-        [HttpPost("add")]
-        public IActionResult Add(Product product)
-        {
-            var result = _productService.Add(product);
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
     }
 }

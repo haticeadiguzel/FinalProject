@@ -9,6 +9,9 @@ namespace Business.Abstact
     public interface ICategoryService
     {
         IDataResult<List<Category>> GetAll();
-        IDataResult<Category> GetById(int categoryId);
+        IDataResult<Category> Get(int categoryId);
+        IResult Add(Category category);
+        IResult Delete(Category category);
+        IResult Update(Category category);
     }
 }
