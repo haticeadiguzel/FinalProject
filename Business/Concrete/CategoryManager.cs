@@ -34,15 +34,17 @@ namespace Business.Concrete
             _categoryDal.Update(category);
             return new SuccessResult(Messages.CategoriesUpdated);
         }
-
-        IDataResult<List<Category>> ICategoryService.GetAll()
-        {
-            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll(), Messages.CategoriesListed);
-        }
-
-        IDataResult<Category> ICategoryService.Get(int categoryId)
+        
+        public IDataResult<Category> Get(int categoryId)
         {
             return new SuccessDataResult<Category>(_categoryDal.Get(c => c.CategoryId == categoryId));
         }
+
+        public IDataResult<List<Category>> GetAll()
+        {
+            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll(),Messages.CategoriesListed);
+        }
+
+      
     }
 }

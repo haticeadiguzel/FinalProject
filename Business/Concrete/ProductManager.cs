@@ -2,7 +2,10 @@
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Cache;
 using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingCorners.Performance;
+using Core.CrossCuttingCorners.Transaction;
 using Core.CrossCuttingCorners.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
@@ -34,8 +37,8 @@ namespace Business.Concrete
         public IResult Add(Product product)
         {
             IResult result = BusinessRules.Run(CheckIfProductNameExists(product.ProductName),
-                CheckIfProductCountOfCategoryCorrect(product.CategoryId), 
-                CheckIfCategoryLimitExceded());
+                CheckIfProductCountOfCategoryCorrect(product.CategoryId), CheckIfCategoryLimitExceded()
+               );
 
             if (result !=null)
             {
@@ -43,19 +46,17 @@ namespace Business.Concrete
             }
             
             _productDal.Add(product);
-            return new ErrorResult();
+            return new SuccessResult(Messages.ProductAdded);
         }
 
+        [CacheAspect]
         public IDataResult<List<Product>> GetAll()
         {
-            //İş kodları
-            //Bir iş sınıfı başka sınıfları newlemez. Bu yüzden metotların dışında bir global kurarız.
             if (DateTime.Now.Hour == 1)
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
-            //Business da sadece IProductDal dır.
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
@@ -63,6 +64,8 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Product>> (_productDal.GetAll(p=>p.CategoryId==id)); //önceden yazdığımız filtreleme kodu sayesinde bunların hepsini yazabiliyoruz
         }
 
+        [CacheAspect]
+        [PerformanceAspect(5)]
         public IDataResult<Product> Get(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
@@ -85,6 +88,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Update(Product product)
         {
             return new SuccessResult(Messages.ProductUpdated);
@@ -118,6 +122,18 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.CategoryLimitExceded);
             }
             return new SuccessResult();
+        }
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionalTest(Product product)
+        {
+            Add(product);
+            if (product.UnitPrice<10)
+            {
+                throw new Exception("");
+            }
+            Add(product);
+            return null;
         }
     }
 }
