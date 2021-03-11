@@ -14,7 +14,6 @@ namespace Core.DataAccess
 
     public interface IEntityRepository<T> where T:class,IEntity,new()  //Generics i burda kullanıyoruz.SAdece class olabilir diye sınırlandırıyoruz.
     {
-        
         List<T> GetAll(Expression<Func<T, bool>> filter = null); //Filtreleme için
         T Get(Expression<Func<T, bool>> filter);
         void Add(T entity);
